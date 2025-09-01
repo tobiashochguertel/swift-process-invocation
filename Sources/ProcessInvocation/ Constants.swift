@@ -2,8 +2,6 @@ import Foundation
 
 import Logging
 
-import ProcessInvocationBridge
-
 
 
 public enum ProcessInvocationConstants {
