@@ -22,7 +22,7 @@ private let processInvocationBridgeName = "swift-process-invocation-bridge"
 @main
 struct ProcessInvocationBridge : ParsableCommand {
 	
-	static var configuration = CommandConfiguration(
+	static let configuration = CommandConfiguration(
 		commandName: processInvocationBridgeName,
 		abstract: "Internal launcher for swift-process-invocation which receives a fd before launching the tool."
 	)
@@ -40,7 +40,7 @@ struct ProcessInvocationBridge : ParsableCommand {
 	@Argument(parsing: .captureForPassthrough)
 	var toolArguments: [String] = []
 	
-	static var logger: Logger = {
+	static let logger: Logger = {
 		var ret = Logger(label: "main")
 		ret.logLevel = .debug
 		return ret
