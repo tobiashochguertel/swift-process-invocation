@@ -268,7 +268,7 @@ final class ProcessInvocationTests : XCTestCase {
 	 *   - Leaks of file descriptors;
 	 *   - Pipe fails to allocate new fds, but Pipe object init is non-fallible in Swift…
 	 *      so we check either way (now we do not use the Pipe object anyway, we get more control over the lifecycle of the fds);
-	 *   - Race between executable end and io group, leading to potentially closed fds _while setting up a new run_, leading to a lot of weird behaviour, such as:
+	 *   - Race between executable end and io group, leading to potentially closed fds _while setting up a new run_, leading to a lot of weird behaviors, such as:
 	 *       - `process not launched exception`,
 	 *       - assertion failures in the spawn and stream method (same fd added twice in a set, which is not possible),
 	 *       - dead-lock with the io group being waited on forever,
