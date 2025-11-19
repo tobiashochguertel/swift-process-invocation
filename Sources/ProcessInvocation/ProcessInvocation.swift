@@ -374,7 +374,7 @@ public struct ProcessInvocation : AsyncSequence {
 		}
 		/* 3. If there was an error reading the process output, we throw. */
 		try outputError?.throw{ Err.outputReadError($0) }
-		/* 4. Retreive process termination status+reason and check them if needed. */
+		/* 4. Retrieve process termination status+reason and check them if needed. */
 		let (exitStatus, exitReason) = (p.terminationStatus, p.terminationReason)
 		if checkValidTerminations {
 			try Self.checkTermination(expectedTerminations: expectedTerminations, terminationStatus: exitStatus, terminationReason: exitReason)
