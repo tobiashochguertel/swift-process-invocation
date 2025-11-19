@@ -637,7 +637,7 @@ final class ProcessInvocationTests : XCTestCase {
 	
 	private struct EnvAndCwd : Codable, Equatable {
 #if os(macOS)
-		static var defaultRemovedKeys = Set<String>(
+		static let defaultRemovedKeys = Set<String>(
 			arrayLiteral:
 			/* Keys removed by spawn (or something else). */
 			"DYLD_FALLBACK_LIBRARY_PATH", "DYLD_FALLBACK_FRAMEWORK_PATH", "DYLD_LIBRARY_PATH", "DYLD_FRAMEWORK_PATH",
@@ -646,7 +646,7 @@ final class ProcessInvocationTests : XCTestCase {
 		)
 #else
 		/* Keys added by swift launcher (presumably). */
-		static var defaultRemovedKeys = Set<String>(arrayLiteral: "LD_LIBRARY_PATH")
+		static let defaultRemovedKeys = Set<String>(arrayLiteral: "LD_LIBRARY_PATH")
 #endif
 		
 		var cwd: String
