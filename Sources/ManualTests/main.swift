@@ -7,6 +7,10 @@ import SystemPackage
 
 
 
+/* Before 5.7 async on top level was not supported.
+ * Note: It might 5.8, 5.7 fails to compile because swift-argument-parser fails to compile, so idk… */
+#if swift(>=5.7)
+
 LoggingSystem.bootstrap(CLTLogger.init, metadataProvider: nil)
 let logger = {
 	var ret = Logger(label: "com.xcode-actions.manual-process-invocation-tests")
@@ -29,3 +33,5 @@ do {
 } catch {
 	logger.warning("Process invocation failed.", metadata: ["error": "\(error)"])
 }
+
+#endif
