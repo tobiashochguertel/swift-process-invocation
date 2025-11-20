@@ -448,7 +448,14 @@ public struct ProcessInvocation : AsyncSequence {
 		}
 		
 		func getFgPgIDSetInfo(for fd: FileDescriptor) -> (destFd: FileDescriptor, originalValue: Int32)? {
+			let myPgrp = getpgrp()
+			guard myPgrp != -1 else {
+				Conf.logger?.warning("Cannot determine my own process group ID; skipping foreground process group ID setting.", metadata: ["error": "\(Errno(rawValue: errno))"])
+				return nil
+			}
+			
 			let originalPgrp = tcgetpgrp(fd.rawValue)
+			Conf.logger?.trace("Got FgPgID.", metadata: ["fd": "\(fd.rawValue)", "pgrp": "\(originalPgrp)"])
 			guard originalPgrp != -1 else {
 				if errno != ENOTTY {
 					Conf.logger?.warning("Cannot determine the process group ID of the process that owns standard input; skipping foreground process group ID setting.", metadata: ["error": "\(Errno(rawValue: errno))"])
@@ -459,6 +466,12 @@ public struct ProcessInvocation : AsyncSequence {
 				}
 				return nil
 			}
+			
+			guard myPgrp == originalPgrp else {
+				Conf.logger?.trace("Current process group ID and own process group ID are different, which means we’re in the background, so we do not set the foreground process group ID.", metadata: ["fd": "\(fd.rawValue)", "pgrp": "\(originalPgrp)", "self-pgrp": "\(myPgrp)"])
+				return nil
+			}
+			
 			return (fd, originalPgrp)
 		}
 		
@@ -803,12 +816,15 @@ public struct ProcessInvocation : AsyncSequence {
 		return {
 			if let fgPgIDSetInfo = fgPgIDSetInfo {
 				let pgid = getpgid(p.processIdentifier)
+				Conf.logger?.trace("Setting FgPgID of fd.", metadata: ["fd": "\(fgPgIDSetInfo.destFd.rawValue)", "pgid": "\(pgid)"])
 				if pgid == -1 {
 					Conf.logger?.error("Failed retrieving the process group ID of the child process.", metadata: ["error": "\(Errno(rawValue: errno))"])
 				} else if tcsetpgrp(fgPgIDSetInfo.destFd.rawValue, pgid) != 0 && errno != ENOTTY {
 					Conf.logger?.error("Failed setting the foreground group ID to the child process group ID.", metadata: ["error": "\(Errno(rawValue: errno))"])
 				}
+				Conf.logger?.trace("After setting FgPgID of fd.")
 			}
+			Conf.logger?.trace("Closing fds.", metadata: ["fds": .array(fdsToCloseAfterRun.map{ "\($0.rawValue)" })])
 			fdsToCloseAfterRun.forEach{
 				do    {try $0.close()}
 				catch {Conf.logger?.error("Failed closing a file descriptor.", metadata: ["error": "\(error)", "fd": "\($0)"])}
