@@ -37,7 +37,7 @@ let package = Package(
 		res.append(.package(url: "https://github.com/apple/swift-log.git",                     from: "1.5.2"))
 		res.append(.package(url: "https://github.com/apple/swift-system.git",                  from: "1.0.0")) /* We’re aware of the existence of System on macOS. After some thinking/research, we decided to agree with <https://forums.swift.org/t/50719/5>. */
 		res.append(.package(url: "https://github.com/Frizlab/UnwrapOrThrow.git",               from: "1.0.1"))
-		res.append(.package(url: "https://github.com/xcode-actions/clt-logger.git",            from: "1.0.0-beta.4"))
+		res.append(.package(url: "https://github.com/xcode-actions/clt-logger.git",            from: "1.0.0"))
 		res.append(.package(url: "https://github.com/xcode-actions/stream-reader.git",         from: "3.6.1"))
 		res.append(.package(url: "https://github.com/xcode-actions/swift-signal-handling.git", .upToNextMinor(from: "1.1.3")))
 		if useXtenderZ {
