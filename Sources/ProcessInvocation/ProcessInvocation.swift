@@ -823,6 +823,9 @@ public struct ProcessInvocation : AsyncSequence {
 					Conf.logger?.error("Failed setting the foreground group ID to the child process group ID.", metadata: ["error": "\(Errno(rawValue: errno))"])
 				}
 				Conf.logger?.trace("After setting FgPgID of fd.")
+				/* TODO: If we have successfully changed the fg pg ID, we should monitor the process we launched for being stopped (Ctrl-Z).
+				 * Specifically we should install a handler for SIGCHLD and check if the child that has the fg pg ID is stopped.
+				 * If it is we should either stop ourselves (expected behavior in a non-shell process), or change the fg pg ID back to ourselves. */
 			}
 			Conf.logger?.trace("Closing fds.", metadata: ["fds": .array(fdsToCloseAfterRun.map{ "\($0.rawValue)" })])
 			fdsToCloseAfterRun.forEach{
