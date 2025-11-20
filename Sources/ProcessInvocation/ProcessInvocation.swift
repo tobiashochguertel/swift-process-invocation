@@ -723,7 +723,7 @@ public struct ProcessInvocation : AsyncSequence {
 #endif
 		
 		/* We used to enter the dispatch group in the registration handlers of the dispatch sources,
-		 *  but we got races where the executable ended before the distatch sources were even registered.
+		 *  but we got races where the executable ended before the dispatch sources were even registered.
 		 * So now we enter the group before launching the executable.
 		 * We enter also once for the process launch (left in additional termination handler of the process). */
 		countOfDispatchGroupLeaveInCaseOfError = outputFileDescriptors.count + 1
