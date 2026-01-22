@@ -2,7 +2,7 @@ import Foundation
 
 
 
-public enum LineSeparators {
+public enum LineSeparators : Sendable {
 	
 	case newLine(unix: Bool, legacyMacOS: Bool, windows: Bool)
 	case customCharacters(Set<UInt8>)
